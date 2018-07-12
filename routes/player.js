@@ -10,12 +10,14 @@ routes.get('/list', function(req, res){
 })
 
 routes.get('/play', function(req, res){
+  io.emit('play');
   player.play();
   res.status(200).send("PLAY");
 })
 
 routes.get('/pause', function(req, res){
   player.pause();
+  io.emit('pause');
   res.status(200).send("PAUSE");
 })
 
