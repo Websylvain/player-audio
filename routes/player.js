@@ -1,34 +1,36 @@
-var express = require('express'), router = express.Router();
-var Player = require('player');
+const express = require('express'), routes = express.Router();
+const Player = require('player');
+
 // create player instance
 var player = new Player('./assets/tracks/bbking-eric-clapton-thetrill.mp3');
 
 
-router.get('/list', function(req, res){
+routes.get('/list', function(req, res){
   res.status(200).send(player.list);
 })
 
-router.get('/play', function(req, res){
+routes.get('/play', function(req, res){
   player.play();
   res.status(200).send("PLAY");
 })
 
-router.get('/pause', function(req, res){
+routes.get('/pause', function(req, res){
   player.pause();
   res.status(200).send("PAUSE");
 })
 
-router.get('/stop', function(req, res){
-  player.pause();
+routes.get('/stop', function(req, res){
+  player.stop();
   res.status(200).send("STOP");
 })
 
-router.get('/next', function(req, res){
+routes.get('/next', function(req, res){
   player.next();
   res.status(200).send("NEXT");
 })
 
-router.post('/add', function(req, res){
+routes.post('/add', function(req, res){
+  io.emit('trackAdded', "./assets/tracks/"+ req.body.filename);
   player.add("./assets/tracks/"+ req.body.filename);
   res.status(200).send("ADD");
 })
@@ -45,4 +47,4 @@ player.on('playend', (tracks)=>{
 })
 
 // -------> END EVENTS <-------//
-module.exports = router;
+module.exports = routes;
